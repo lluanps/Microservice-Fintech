@@ -1,4 +1,4 @@
-package com.luan.msclient.domain;
+package com.luan.msClient.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

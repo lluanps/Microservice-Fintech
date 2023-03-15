@@ -1,4 +1,4 @@
-package com.luan.eurekaserver;
+package com.luan.eurekaServer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,9 +1,8 @@
-package com.luan.msclient.application;
+package com.luan.msClient.application;
 
-import com.luan.msclient.domain.Cliente;
-import com.luan.msclient.infra.repository.ClienteRepository;
+import com.luan.msClient.domain.Cliente;
+import com.luan.msClient.infra.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,10 +1,10 @@
-package com.luan.msclient;
+package com.luan.msCloudGateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsclientApplicationTests {
+class MsCloudGatewayApplicationTests {
 
 	@Test
 	void contextLoads() {
