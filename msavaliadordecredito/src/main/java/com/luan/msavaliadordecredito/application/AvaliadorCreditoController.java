@@ -1,11 +1,14 @@
 package com.luan.msavaliadordecredito.application;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.luan.msavaliadordecredito.application.exception.DadosClienteNotFoundException;
+import com.luan.msavaliadordecredito.application.exception.ErroComunicacaoMicroserviceException;
 import com.luan.msavaliadordecredito.domain.model.SituacaoCliente;
 
 import lombok.RequiredArgsConstructor;
@@ -23,10 +26,18 @@ public class AvaliadorCreditoController {
 	}
 	
 	@GetMapping(value = "situacao-cliente", params = "cpf")
-	public ResponseEntity<SituacaoCliente> consultaSituacaoCliente(
+	public ResponseEntity consultaSituacaoCliente(
 			@RequestParam(value = "cpf") String cpf) {
-		SituacaoCliente situacaCliente = avaliadorCreditoService.obterSituacaoCliente(cpf);
-		return ResponseEntity.ok(situacaCliente);
+		try {
+			SituacaoCliente situacaCliente = avaliadorCreditoService.obterSituacaoCliente(cpf);
+			return ResponseEntity.ok(situacaCliente);
+		} catch (DadosClienteNotFoundException e) {
+			return ResponseEntity.notFound().build();
+			
+		}catch (ErroComunicacaoMicroserviceException e) {
+			return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+			
+		}
 	}
 	
  }
