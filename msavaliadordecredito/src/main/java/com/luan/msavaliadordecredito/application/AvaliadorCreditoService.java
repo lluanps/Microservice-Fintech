@@ -2,6 +2,7 @@ package com.luan.msavaliadordecredito.application;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -10,14 +11,18 @@ import org.springframework.stereotype.Service;
 
 import com.luan.msavaliadordecredito.application.exception.DadosClienteNotFoundException;
 import com.luan.msavaliadordecredito.application.exception.ErroComunicacaoMicroserviceException;
+import com.luan.msavaliadordecredito.application.exception.ErroSolicitacaoCartaoException;
 import com.luan.msavaliadordecredito.domain.model.Cartao;
 import com.luan.msavaliadordecredito.domain.model.CartaoAprovado;
 import com.luan.msavaliadordecredito.domain.model.CartaoCliente;
 import com.luan.msavaliadordecredito.domain.model.DadosCliente;
+import com.luan.msavaliadordecredito.domain.model.DadosSolicitacaoEmissaoCartao;
+import com.luan.msavaliadordecredito.domain.model.ProtocoloSolicitacaoCartao;
 import com.luan.msavaliadordecredito.domain.model.RetornoAvaliacaoCliente;
 import com.luan.msavaliadordecredito.domain.model.SituacaoCliente;
 import com.luan.msavaliadordecredito.infa.clients.CartoesResourceClient;
 import com.luan.msavaliadordecredito.infa.clients.ClienteResourceClient;
+import com.luan.msavaliadordecredito.infa.mqueue.SolicitacaoEmissaoCartaoPublisher;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +34,8 @@ public class AvaliadorCreditoService {
 	private final ClienteResourceClient clientClient;
 	
 	private final CartoesResourceClient cartoesClient;
+	
+	private final SolicitacaoEmissaoCartaoPublisher emissaoCartaoPublisher;
 	
 	public SituacaoCliente obterSituacaoCliente(String cpf) throws DadosClienteNotFoundException, ErroComunicacaoMicroserviceException {
 		//obter dados clientes -MSCLIENTES
@@ -91,7 +98,17 @@ public class AvaliadorCreditoService {
 				 throw new DadosClienteNotFoundException();
 			}
 			throw new ErroComunicacaoMicroserviceException(e.getMessage(), status);
-			}	
+		}	
+	}
+	
+	public ProtocoloSolicitacaoCartao solicitarEmissaoDeCartao(DadosSolicitacaoEmissaoCartao dados) {
+		try {
+			emissaoCartaoPublisher.solicitarCartao(dados);
+			var protocolo = UUID.randomUUID().toString();
+			return new ProtocoloSolicitacaoCartao(protocolo);
+		} catch (Exception e) {
+			throw new ErroSolicitacaoCartaoException(e.getMessage());
 		}
+	}
 }
 
