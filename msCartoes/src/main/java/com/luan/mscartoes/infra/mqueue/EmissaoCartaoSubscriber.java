@@ -14,9 +14,11 @@ import com.luan.mscartoes.infra.repository.CartoesRepository;
 import com.luan.mscartoes.infra.repository.ClienteCartaoRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class EmissaoCartaoSubscriber {
 	
 	
@@ -43,7 +45,7 @@ public class EmissaoCartaoSubscriber {
 			clienteCartaoRepository.save(clienteCartao);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Erro ao receber solicitação de emissão de cartão: {}, ", e.getMessage());
 		}
 	}
 }
