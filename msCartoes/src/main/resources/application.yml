@@ -2,7 +2,7 @@ spring:
   application:
     name: msCartoes
   rabbitmq:
-    host: localhost
+    host: cursoms-rabbitmq #nome do host será mudado futuramente
     port: 5672
     username: guest
     password: guest
@@ -13,7 +13,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://cursoms-eureka-user:lahasurviipedannilo@localhost:8761/eureka
+      defaultZone: http://cursoms-eureka-user:lahasurviipedannilo@cursoms-eureka:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}} #1.7.3 Changing the Eureka Instance ID https://cloud.spring.io/spring-cloud-netflix/multi/multi__service_discovery_eureka_clients.html
 
